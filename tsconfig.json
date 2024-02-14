@@ -1,11 +1,8 @@
 {
+  "type": "module",
   "compilerOptions": {
-    // "baseUrl": "./src",
-    // "paths": {
-    //   "Odin/*": ["*"]
-    // },
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    // "module": "",
+    // "moduleResolution": "NodeNext",
     "target": "ES2022",
     "outDir": "dist",
     "sourceMap": true,
