@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // "baseUrl": "./src",
+    // "paths": {
+    //   "Odin/*": ["*"]
+    // },
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "outDir": "dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "baseUrl": "." /* Specify the base directory to resolve non-relative module names. */,
+    "paths": {
+      "@Odin/*": ["src/*"]
+    } /* Specify a set of entries that re-map imports to additional lookup locations. */,
+
+    "plugins": [
+      /* Transform paths in output .js files */
+      {
+        "transform": "typescript-transform-paths"
+      },
+      /* Transform paths in output .d.ts files */
+      {
+        "transform": "typescript-transform-paths",
+        "afterDeclarations": true
+      }
+    ]
+  },
+
+  "exclude": ["node_modules", "**/node_modules/*"],
+  "include": ["./src/**/*.ts"]
+}
