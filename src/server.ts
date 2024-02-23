@@ -4,9 +4,11 @@ import { connectDB } from "@Odin/db/mongodb";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import router from "@Odin/routes/router";
+import cors from "cors";
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+app.use(cors());
 app.use(bodyParser.json());
 require("dotenv").config();
 // console.log(process.env.JWT_SECRET);

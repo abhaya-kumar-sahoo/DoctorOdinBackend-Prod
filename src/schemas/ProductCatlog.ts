@@ -16,6 +16,19 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  heading: {
+    type: String,
+    required: true,
+  },
+  moddleNo: {
+    type: String,
+    required: true,
+  },
+  originalPrice: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });
