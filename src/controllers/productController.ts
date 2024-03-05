@@ -1,10 +1,21 @@
 import { Request, Response } from "express";
 import { Product } from "@Odin/schemas/ProductCatlog";
+import AWS from "aws-sdk";
+import { v4 as uuidv4 } from "uuid";
 
-export const createProductController = async (req: Request, res: Response) => {
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION,
+});
+
+export const createProductController = async (req, res: Response) => {
   try {
     // Extract name, image, and price from the request body
-    const { name, image, price, moddleNo, heading, originalPrice } = req.body;
+    const { name, image, price, moddleNo, heading, originalPrice, link } =
+      req.body;
+    console.log(req.body);
+    console.log(req?.file); // Metadata about files (name, size, etc.)
 
     // Initialize an array to store missing fields
     const missingFields: string[] = [];
@@ -13,7 +24,7 @@ export const createProductController = async (req: Request, res: Response) => {
     if (!name) {
       missingFields.push("name");
     }
-    if (!image) {
+    if (!req?.file) {
       missingFields.push("image");
     }
     if (!price) {
@@ -28,6 +39,9 @@ export const createProductController = async (req: Request, res: Response) => {
     if (!originalPrice) {
       missingFields.push("originalPrice");
     }
+    if (!link) {
+      missingFields.push("link");
+    }
 
     // If any field is missing, return a 400 error with the missing fields
     if (missingFields.length > 0) {
@@ -38,14 +52,31 @@ export const createProductController = async (req: Request, res: Response) => {
       });
     }
 
+    // Generate a unique filename for the image
+    const filename = `${uuidv4()}.webp`;
+
+    // Upload image to S3 bucket
+    await s3
+      .upload({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: filename,
+        Body: req.file?.buffer,
+        ContentType: req?.file?.mimetype,
+      })
+      .promise();
+
+    // Construct the URL of the uploaded image
+    const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${filename}`;
+
     // Create a new product instance
     const product = new Product({
       name,
-      image,
+      image: imageUrl,
       price,
       moddleNo,
       heading,
       originalPrice,
+      link,
     });
 
     // Save the product to the database
@@ -106,11 +137,36 @@ export const getProducts = async (req: Request, res: Response) => {
   }
 };
 
+export const getProductById = async (req: Request, res: Response) => {
+  try {
+    const { productId } = req.params;
+
+    // Validate if productId is provided
+    if (!productId) {
+      return res.status(400).json({ error: "Product ID is required" });
+    }
+
+    // Find the product by its ID
+    const product = await Product.findById(productId);
+
+    // If product is not found, return 404 error
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Return the product
+    res.status(200).json(product);
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
 export const updateProduct = async (req: Request, res: Response) => {
   try {
     // console.log(req.params);
     // Extracting parameters from request body
-    const { name, price, image, moddleNo, heading, originalPrice } = req.body;
+    const { name, price, image, moddleNo, heading, originalPrice, link } =
+      req.body;
     const { productId } = req.params;
 
     // Validating productId
@@ -120,7 +176,13 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     // Validating update fields
     if (
-      (!name && !price && !image && !moddleNo && !heading && !originalPrice) ||
+      (!name &&
+        !price &&
+        !image &&
+        !moddleNo &&
+        !heading &&
+        !originalPrice &&
+        !link) ||
       (price && isNaN(price))
     ) {
       return res.status(400).json({ error: "Invalid update data" });
@@ -145,6 +207,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     }
     if (moddleNo) {
       update.moddleNo = moddleNo;
+    }
+    if (link) {
+      update.link = link;
     }
     // Updating updatedAt field
     update.updatedAt = new Date();

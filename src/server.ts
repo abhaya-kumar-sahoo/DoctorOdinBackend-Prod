@@ -9,11 +9,13 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// app.use(bodyParser.json());
 require("dotenv").config();
 // console.log(process.env.JWT_SECRET);
 app.use("/", router);
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 connectDB();
 const swaggerDefinition = {
