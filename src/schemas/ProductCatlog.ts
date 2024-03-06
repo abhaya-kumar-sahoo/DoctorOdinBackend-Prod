@@ -16,10 +16,6 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  heading: {
-    type: String,
-    required: true,
-  },
   link: {
     type: String,
     required: true,

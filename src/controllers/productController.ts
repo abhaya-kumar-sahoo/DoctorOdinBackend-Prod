@@ -14,8 +14,6 @@ export const createProductController = async (req, res: Response) => {
     // Extract name, image, and price from the request body
     const { name, image, price, moddleNo, heading, originalPrice, link } =
       req.body;
-    console.log(req.body);
-    console.log(req?.file); // Metadata about files (name, size, etc.)
 
     // Initialize an array to store missing fields
     const missingFields: string[] = [];
@@ -32,9 +30,6 @@ export const createProductController = async (req, res: Response) => {
     }
     if (!moddleNo) {
       missingFields.push("moddleNo");
-    }
-    if (!heading) {
-      missingFields.push("heading");
     }
     if (!originalPrice) {
       missingFields.push("originalPrice");
@@ -74,7 +69,6 @@ export const createProductController = async (req, res: Response) => {
       image: imageUrl,
       price,
       moddleNo,
-      heading,
       originalPrice,
       link,
     });
@@ -165,8 +159,7 @@ export const updateProduct = async (req: Request, res: Response) => {
   try {
     // console.log(req.params);
     // Extracting parameters from request body
-    const { name, price, image, moddleNo, heading, originalPrice, link } =
-      req.body;
+    const { name, price, image, moddleNo, originalPrice, link } = req.body;
     const { productId } = req.params;
 
     // Validating productId
@@ -176,13 +169,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
     // Validating update fields
     if (
-      (!name &&
-        !price &&
-        !image &&
-        !moddleNo &&
-        !heading &&
-        !originalPrice &&
-        !link) ||
+      (!name && !price && !image && !moddleNo && !originalPrice && !link) ||
       (price && isNaN(price))
     ) {
       return res.status(400).json({ error: "Invalid update data" });
@@ -202,9 +189,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (image) {
       update.image = image;
     }
-    if (heading) {
-      update.heading = heading;
-    }
+
     if (moddleNo) {
       update.moddleNo = moddleNo;
     }
