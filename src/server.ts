@@ -55,9 +55,15 @@ const swaggerSpec = swaggerJSDoc(options);
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.json({ message: "working fine !! 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹" });
 });
-
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    message: "Everything is Good 💐💐💐💐💐💐💐 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹",
+    project_name: "Odin_Nodejs Backend",
+    dev_name: "Abhaya Kumar Sahoo",
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
