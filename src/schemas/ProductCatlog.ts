@@ -20,6 +20,11 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  heading: {
+    type: String,
+    required: false,
+    default: "",
+  },
   moddleNo: {
     type: String,
     required: true,
@@ -29,6 +34,8 @@ const productSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
+  position: { type: Number, default: 0 }, // Add position field
+
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

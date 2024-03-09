@@ -7,6 +7,7 @@ import {
   getProductById,
   getProducts,
   updateProduct,
+  updateProductOrder,
 } from "@Odin/controllers/productController";
 import { isLogin } from "@Odin/middleware/authentication";
 import multer from "multer";
@@ -41,7 +42,8 @@ router.post("/login", loginController);
 router
   .route("/product/:productId")
   .all(isLogin) // Apply middleware here if needed
-  .put(updateProduct)
+  .put(upload.single("image"), updateProduct)
+  .patch(updateProductOrder)
   .get(getProductById)
   .delete(deleteProduct);
 

@@ -5,17 +5,22 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import router from "@Odin/routes/router";
 import cors from "cors";
+import path from "path";
 const app = express();
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views")); // Set the views directory
+app.use(express.static(path.join(__dirname, "public")));
+
+require("dotenv").config();
 
 const PORT = process.env.PORT || 3000;
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use(bodyParser.json());
-require("dotenv").config();
+app.use(bodyParser.json());
 // console.log(process.env.JWT_SECRET);
 app.use("/", router);
-// app.use(bodyParser.json());
+app.use(bodyParser.json());
 
 connectDB();
 const swaggerDefinition = {
@@ -54,9 +59,18 @@ const swaggerSpec = swaggerJSDoc(options);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get("/", (req, res) => {
-  res.json({ message: "working fine !! 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹" });
+app.get("/", async (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "home.html"));
 });
+
+// app.get("/", (req, res) => {
+//   res.json({
+//     message:
+//       "Everything is Good 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹 ✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅✅ 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹",
+//     project_name: "Odin_Nodejs Backend",
+//     dev_name: "A.K Sahoo",
+//   });
+// });
 app.get("/health", (req, res) => {
   res.status(200).json({
     message: "Everything is Good 💐💐💐💐💐💐💐 🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹🌹",

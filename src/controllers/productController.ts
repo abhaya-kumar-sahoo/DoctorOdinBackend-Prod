@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import { Product } from "@Odin/schemas/ProductCatlog";
 import AWS from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
+import config from "dotenv";
+config.config();
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -9,11 +11,11 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION,
 });
 
+// console.log(process.env);
 export const createProductController = async (req, res: Response) => {
   try {
     // Extract name, image, and price from the request body
-    const { name, image, price, moddleNo, heading, originalPrice, link } =
-      req.body;
+    const { name, price, moddleNo, originalPrice, link } = req.body;
 
     // Initialize an array to store missing fields
     const missingFields: string[] = [];
@@ -110,6 +112,7 @@ export const getProducts = async (req: Request, res: Response) => {
 
     // Fetch products from the database based on search query
     const products = await Product.find(searchQuery).skip(skip).limit(limit);
+    // .sort({ position: 1 });
 
     // If no products found, return 404 error
     if (products.length === 0) {
@@ -155,11 +158,15 @@ export const getProductById = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-export const updateProduct = async (req: Request, res: Response) => {
+
+export const updateProduct = async (req, res: Response) => {
+  // console.log("gfcg", req.file);
+
   try {
     // console.log(req.params);
     // Extracting parameters from request body
-    const { name, price, image, moddleNo, originalPrice, link } = req.body;
+    const { name, price, image, moddleNo, originalPrice, link, position } =
+      req.body;
     const { productId } = req.params;
 
     // Validating productId
@@ -167,10 +174,15 @@ export const updateProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid productId" });
     }
 
-    // Validating update fields
     if (
-      (!name && !price && !image && !moddleNo && !originalPrice && !link) ||
-      (price && isNaN(price))
+      (!name &&
+        !price &&
+        !req.file &&
+        !moddleNo &&
+        !originalPrice &&
+        !link &&
+        !position) ||
+      (price && isNaN(price)) // Add condition for position
     ) {
       return res.status(400).json({ error: "Invalid update data" });
     }
@@ -186,8 +198,43 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (originalPrice) {
       update.originalPrice = parseFloat(originalPrice);
     }
-    if (image) {
-      update.image = image;
+    if (req.file) {
+      // Delete the image from S3 if it exists
+      const product = await Product.findById(productId);
+
+      const filename = product.image.split("/").pop(); // Extract filename from image URL
+      console.log("product image name", filename);
+      await s3
+        .deleteObject({
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: filename,
+        })
+        .promise();
+
+      // Generate a unique filename for the image
+      const newFilename = `${uuidv4()}.webp`;
+
+      // Upload image to S3 bucket
+      await s3
+        .upload({
+          Bucket: process.env.AWS_BUCKET_NAME,
+          Key: newFilename,
+          Body: req.file?.buffer,
+          ContentType: req?.file?.mimetype,
+        })
+        .promise()
+        .then((data) => {})
+        .catch((err) => {
+          console.log("err", err);
+          return res
+            .status(500)
+            .json({ error: "Internal Server Error", err: err });
+        });
+
+      // Construct the URL of the uploaded image
+      const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${newFilename}`;
+
+      update.image = imageUrl;
     }
 
     if (moddleNo) {
@@ -196,6 +243,7 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (link) {
       update.link = link;
     }
+
     // Updating updatedAt field
     update.updatedAt = new Date();
 
@@ -221,6 +269,57 @@ export const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
+export const updateProductOrder = async (req: Request, res: Response) => {
+  try {
+    const { position } = req.body;
+    const { productId } = req.params;
+
+    // Validate productId format
+    if (!productId || !/^[0-9a-fA-F]{24}$/.test(productId)) {
+      return res.status(400).json({ error: "Invalid productId" });
+    }
+
+    // Validate position
+    if (position === undefined || isNaN(position)) {
+      return res.status(400).json({ error: "Invalid position data" });
+    }
+
+    // Find the product by its ID
+    const product = await Product.findById(productId);
+
+    // Check if product exists
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    // Find the product with the specified position
+    const productWithPosition = await Product.findOne({ position });
+
+    // If a product already exists at the target position, shift other products
+    if (productWithPosition) {
+      await Product.updateMany(
+        { position: { $gte: position } },
+        { $inc: { position: 1 } }
+      );
+    }
+
+    // Update the position of the product
+    product.position = position;
+    product.updatedAt = new Date();
+
+    // Save the updated product
+    const updatedProduct = await product.save();
+
+    res.status(200).json({
+      message: "Product order updated successfully",
+      product: updatedProduct,
+    });
+  } catch (error) {
+    console.error("Error updating product order:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
     // Extracting productId from request parameters
@@ -230,10 +329,18 @@ export const deleteProduct = async (req: Request, res: Response) => {
     if (!productId || !/^[0-9a-fA-F]{24}$/.test(productId)) {
       return res.status(400).json({ error: "Invalid productId" });
     }
+    const product = await Product.findById(productId);
 
     // Finding the product by productId and deleting it
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
+    const filename = product.image.split("/").pop(); // Extract filename from image URL
+    await s3
+      .deleteObject({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: filename,
+      })
+      .promise();
     // If product not found, return 404 error
     if (!deletedProduct) {
       return res.status(404).json({ error: "Product not found" });
