@@ -7,7 +7,10 @@ exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectDB = async () => {
     try {
-        mongoose_1.default.connect(process.env.DATABASE_URL);
+        mongoose_1.default.connect(process.env.DATABASE_URL, {
+            serverSelectionTimeoutMS: 10000, // Increase timeout for server selection
+            socketTimeoutMS: 45000, // Increase timeout for individual operations
+        });
         const db = mongoose_1.default.connection;
         db.on("error", console.error.bind(console, "connection error:"));
         db.once("open", () => {
