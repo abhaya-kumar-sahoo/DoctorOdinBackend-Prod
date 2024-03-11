@@ -54,7 +54,7 @@ const swaggerDefinition = {
 
 const options = {
   swaggerDefinition,
-  apis: [`${__dirname}/swagger/*.ts`],
+  apis: [`${__dirname}/swagger/*`],
 };
 const swaggerSpec = swaggerJSDoc(options);
 
