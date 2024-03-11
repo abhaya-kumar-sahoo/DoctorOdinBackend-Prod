@@ -323,7 +323,7 @@
  */
 /**
  * @swagger
- * /product/{productId}/order:
+ * /product/{productId}:
  *   patch:
  *     security:
  *       - BearerAuth: []
