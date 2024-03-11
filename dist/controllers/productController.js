@@ -100,8 +100,10 @@ const getProducts = async (req, res) => {
         // Get total count of products based on search query
         const totalCount = await ProductCatlog_1.Product.countDocuments(searchQuery);
         // Fetch products from the database based on search query
-        const products = await ProductCatlog_1.Product.find(searchQuery).skip(skip).limit(limit);
-        // .sort({ position: 1 });
+        const products = await ProductCatlog_1.Product.find(searchQuery)
+            .skip(skip)
+            .limit(limit)
+            .sort({ position: 1 });
         // If no products found, return 404 error
         if (products.length === 0) {
             return res.status(404).json({ error: "No products found" });
