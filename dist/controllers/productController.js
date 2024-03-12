@@ -8,6 +8,9 @@ const ProductCatlog_1 = require("../schemas/ProductCatlog");
 const aws_sdk_1 = __importDefault(require("aws-sdk"));
 const uuid_1 = require("uuid");
 const dotenv_1 = __importDefault(require("dotenv"));
+const envFile = process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 dotenv_1.default.config();
 const s3 = new aws_sdk_1.default.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -59,6 +62,7 @@ const createProductController = async (req, res) => {
             .promise();
         // Construct the URL of the uploaded image
         const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${filename}`;
+        const data_length = await ProductCatlog_1.Product.find();
         // Create a new product instance
         const product = new ProductCatlog_1.Product({
             name,
@@ -67,6 +71,7 @@ const createProductController = async (req, res) => {
             moddleNo,
             originalPrice,
             link,
+            position: data_length.length,
         });
         // Save the product to the database
         await product.save();

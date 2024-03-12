@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const envFile = process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 dotenv_1.default.config();
 const connectDB = async () => {
     try {

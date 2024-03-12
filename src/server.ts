@@ -10,6 +10,10 @@ const app = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Set the views directory
 app.use(express.static(path.join(__dirname, "public")));
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 
 require("dotenv").config();
 console.log("SERVER DATABASE URL", process.env.DATABASE_URL);
@@ -22,7 +26,7 @@ app.use(bodyParser.json());
 // console.log(process.env.JWT_SECRET);
 app.use("/", router);
 app.use(bodyParser.json());
-
+console.log(process.env.NODE_ENV);
 connectDB();
 const swaggerDefinition = {
   openapi: "3.0.0",

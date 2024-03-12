@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import config from "dotenv";
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 config.config();
+
 export const connectDB = async () => {
   try {
     console.log("DATABASE URL", process.env.DATABASE_URL);

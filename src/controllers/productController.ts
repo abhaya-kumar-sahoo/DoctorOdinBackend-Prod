@@ -3,8 +3,11 @@ import { Product } from "@Odin/schemas/ProductCatlog";
 import AWS from "aws-sdk";
 import { v4 as uuidv4 } from "uuid";
 import config from "dotenv";
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 config.config();
-
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -64,7 +67,7 @@ export const createProductController = async (req, res: Response) => {
 
     // Construct the URL of the uploaded image
     const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${filename}`;
-
+    const data_length = await Product.find();
     // Create a new product instance
     const product = new Product({
       name,
@@ -73,6 +76,7 @@ export const createProductController = async (req, res: Response) => {
       moddleNo,
       originalPrice,
       link,
+      position: data_length.length,
     });
 
     // Save the product to the database
@@ -115,7 +119,6 @@ export const getProducts = async (req: Request, res: Response) => {
       .skip(skip)
       .limit(limit)
       .sort({ position: 1 });
-
     // If no products found, return 404 error
     if (products.length === 0) {
       return res.status(404).json({ error: "No products found" });

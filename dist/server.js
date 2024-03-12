@@ -15,6 +15,9 @@ const app = (0, express_1.default)();
 app.set("view engine", "ejs");
 app.set("views", path_1.default.join(__dirname, "views")); // Set the views directory
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
+const envFile = process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 require("dotenv").config();
 console.log("SERVER DATABASE URL", process.env.DATABASE_URL);
 const PORT = process.env.PORT || 3000;
@@ -24,6 +27,7 @@ app.use(body_parser_1.default.json());
 // console.log(process.env.JWT_SECRET);
 app.use("/", router_1.default);
 app.use(body_parser_1.default.json());
+console.log(process.env.NODE_ENV);
 (0, mongodb_1.connectDB)();
 const swaggerDefinition = {
     openapi: "3.0.0",
