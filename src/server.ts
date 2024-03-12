@@ -16,7 +16,6 @@ const envFile =
     : ".env.development";
 
 require("dotenv").config();
-console.log("SERVER DATABASE URL", process.env.DATABASE_URL);
 
 const PORT = process.env.PORT || 3000;
 app.use(cors());
