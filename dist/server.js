@@ -19,7 +19,6 @@ const envFile = process.env.NODE_ENV === "production"
     ? ".env.production"
     : ".env.development";
 require("dotenv").config();
-console.log("SERVER DATABASE URL", process.env.DATABASE_URL);
 const PORT = process.env.PORT || 3000;
 app.use((0, cors_1.default)());
 // app.use(bodyParser.urlencoded({ extended: false }));

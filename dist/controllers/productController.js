@@ -17,6 +17,10 @@ const s3 = new aws_sdk_1.default.S3({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
     region: process.env.AWS_REGION,
 });
+console.log("SERVER AWS_ACCESS_KEY_ID", process.env.AWS_ACCESS_KEY_ID);
+console.log("SERVER AWS_SECRET_ACCESS_KEY", process.env.AWS_SECRET_ACCESS_KEY);
+console.log("SERVER AWS_REGION", process.env.AWS_REGION);
+console.log("SERVER JWT_SECRET", process.env.JWT_SECRET);
 // console.log(process.env);
 const createProductController = async (req, res) => {
     try {
