@@ -192,13 +192,13 @@ const updateProduct = async (req, res) => {
             // Delete the image from S3 if it exists
             const product = await ProductCatlog_1.Product.findById(productId);
             const filename = product.image.split("/").pop(); // Extract filename from image URL
-            console.log("product image name", filename);
-            await s3
-                .deleteObject({
-                Bucket: process.env.AWS_BUCKET_NAME,
-                Key: filename,
-            })
-                .promise();
+            // console.log("product image name", filename);
+            // await s3
+            //   .deleteObject({
+            //     Bucket: process.env.AWS_BUCKET_NAME,
+            //     Key: filename,
+            //   })
+            //   .promise();
             // Generate a unique filename for the image
             const newFilename = `${(0, uuid_1.v4)()}.webp`;
             // Upload image to S3 bucket
@@ -302,12 +302,12 @@ const deleteProduct = async (req, res) => {
         // Finding the product by productId and deleting it
         const deletedProduct = await ProductCatlog_1.Product.findByIdAndDelete(productId);
         const filename = product.image.split("/").pop(); // Extract filename from image URL
-        await s3
-            .deleteObject({
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: filename,
-        })
-            .promise();
+        // await s3
+        //   .deleteObject({
+        //     Bucket: process.env.AWS_BUCKET_NAME,
+        //     Key: filename,
+        //   })
+        //   .promise();
         // If product not found, return 404 error
         if (!deletedProduct) {
             return res.status(404).json({ error: "Product not found" });
