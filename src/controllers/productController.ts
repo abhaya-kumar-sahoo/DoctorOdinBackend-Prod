@@ -342,7 +342,6 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     // Finding the product by productId and deleting it
     const deletedProduct = await Product.findByIdAndDelete(productId);
-
     const filename = product.image.split("/").pop(); // Extract filename from image URL
     await s3
       .deleteObject({
@@ -363,3 +362,18 @@ export const deleteProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+// (async () => {
+//   try {
+//     await s3
+//       .deleteObject({
+//         Bucket: process.env.AWS_BUCKET_NAME,
+//         Key: "1d8a07a4-5798-46f4-9602-d8eee8789338.webp",
+//       })
+//       .promise();
+//     console.log("Object deleted successfully");
+//   } catch (error) {
+//     console.error("Error deleting object:", error);
+//   }
+// })();
+
+// 1d8a07a4-5798-46f4-9602-d8eee8789338.webp

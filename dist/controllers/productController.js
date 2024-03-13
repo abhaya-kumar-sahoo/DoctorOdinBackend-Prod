@@ -322,4 +322,18 @@ const deleteProduct = async (req, res) => {
     }
 };
 exports.deleteProduct = deleteProduct;
+// (async () => {
+//   try {
+//     await s3
+//       .deleteObject({
+//         Bucket: process.env.AWS_BUCKET_NAME,
+//         Key: "1d8a07a4-5798-46f4-9602-d8eee8789338.webp",
+//       })
+//       .promise();
+//     console.log("Object deleted successfully");
+//   } catch (error) {
+//     console.error("Error deleting object:", error);
+//   }
+// })();
+// 1d8a07a4-5798-46f4-9602-d8eee8789338.webp
 //# sourceMappingURL=productController.js.map
