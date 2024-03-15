@@ -270,9 +270,16 @@ const updateProductOrder = async (req, res) => {
         }
         // Find the product with the specified position
         const productWithPosition = await ProductCatlog_1.Product.findOne({ position });
-        // If a product already exists at the target position, shift other products
+        // Shift other products' positions if needed
         if (productWithPosition) {
-            await ProductCatlog_1.Product.updateMany({ position: { $gte: position } }, { $inc: { position: 1 } });
+            // If the new position is greater than the current position
+            if (position > product.position) {
+                await ProductCatlog_1.Product.updateMany({ position: { $gt: product.position, $lte: position } }, { $inc: { position: -1 } });
+            }
+            // If the new position is less than the current position
+            else if (position < product.position) {
+                await ProductCatlog_1.Product.updateMany({ position: { $gte: position, $lt: product.position } }, { $inc: { position: 1 } });
+            }
         }
         // Update the position of the product
         product.position = position;
@@ -301,6 +308,7 @@ const deleteProduct = async (req, res) => {
         const product = await ProductCatlog_1.Product.findById(productId);
         // Finding the product by productId and deleting it
         const deletedProduct = await ProductCatlog_1.Product.findByIdAndDelete(productId);
+        await ProductCatlog_1.Product.updateMany({ position: { $gt: product.position } }, { $inc: { position: -1 } });
         const filename = product.image.split("/").pop(); // Extract filename from image URL
         // await s3
         //   .deleteObject({

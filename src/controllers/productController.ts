@@ -304,12 +304,22 @@ export const updateProductOrder = async (req: Request, res: Response) => {
     // Find the product with the specified position
     const productWithPosition = await Product.findOne({ position });
 
-    // If a product already exists at the target position, shift other products
+    // Shift other products' positions if needed
     if (productWithPosition) {
-      await Product.updateMany(
-        { position: { $gte: position } },
-        { $inc: { position: 1 } }
-      );
+      // If the new position is greater than the current position
+      if (position > product.position) {
+        await Product.updateMany(
+          { position: { $gt: product.position, $lte: position } },
+          { $inc: { position: -1 } }
+        );
+      }
+      // If the new position is less than the current position
+      else if (position < product.position) {
+        await Product.updateMany(
+          { position: { $gte: position, $lt: product.position } },
+          { $inc: { position: 1 } }
+        );
+      }
     }
 
     // Update the position of the product
@@ -342,6 +352,11 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     // Finding the product by productId and deleting it
     const deletedProduct = await Product.findByIdAndDelete(productId);
+    await Product.updateMany(
+      { position: { $gt: product.position } },
+      { $inc: { position: -1 } }
+    );
+
     const filename = product.image.split("/").pop(); // Extract filename from image URL
     // await s3
     //   .deleteObject({
@@ -362,6 +377,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 // (async () => {
 //   try {
 //     await s3
