@@ -80,7 +80,7 @@ export const createProductController = async (req, res: Response) => {
       moddleNo,
       originalPrice,
       link,
-      position: data_length.length,
+      position: data_length.length + 1,
     });
 
     // Save the product to the database

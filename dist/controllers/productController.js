@@ -75,7 +75,7 @@ const createProductController = async (req, res) => {
             moddleNo,
             originalPrice,
             link,
-            position: data_length.length,
+            position: data_length.length + 1,
         });
         // Save the product to the database
         await product.save();
