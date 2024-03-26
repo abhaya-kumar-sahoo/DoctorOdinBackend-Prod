@@ -10,6 +10,9 @@ export interface User extends Document {
   weight: number;
   firstName: string;
   lastName: string;
+  gender:string;
+  dateOfBirth:string;
+
 }
 
 const userSchema = new mongoose.Schema<User>({
@@ -21,6 +24,8 @@ const userSchema = new mongoose.Schema<User>({
   weight: { type: Number, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
+  dateOfBirth:{ type: String, required: true },
+  gender:{ type: String, required: true },
 });
 
 const UserModel = mongoose.model<User>("User", userSchema);
