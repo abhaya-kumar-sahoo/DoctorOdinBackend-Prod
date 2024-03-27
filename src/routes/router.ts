@@ -1,4 +1,6 @@
 import express from "express";
+import * as userController from "../controllers/UserController";
+import * as tagController from "../controllers/tagController";
 import { registerController } from "../controllers/registerController";
 import { loginController } from "@Odin/controllers/loginController";
 import {
@@ -53,4 +55,9 @@ router
   .post(upload.single("image"), createProductController)
   .get(getProducts);
 
+router.post("/addrecord", isLogin, userController.addRecord);
+router.get("/gethistory", isLogin, userController.getHistory);
+router.get("/getHistoryByDeviceId", isLogin, userController.getHistoryByDeviveId);
+
+router.post("/addtag", isLogin, tagController.addTag);
 export default router;
