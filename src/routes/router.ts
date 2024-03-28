@@ -58,6 +58,8 @@ router
 router.post("/addrecord", isLogin, userController.addRecord);
 router.get("/gethistory", isLogin, userController.getHistory);
 router.get("/getHistoryByDeviceId", isLogin, userController.getHistoryByDeviveId);
+router.get("/generateReportForSingleInstrument", isLogin, userController.generateReportForSingleInstrument);
+router.get("/generateReportOfMultipleInstrument", isLogin, userController.generateReportOfMultipleDevice);
 
 router.post("/addtag", isLogin, tagController.addTag);
 export default router;
