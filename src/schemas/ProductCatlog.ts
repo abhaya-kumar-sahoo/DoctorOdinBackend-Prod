@@ -3,36 +3,35 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: false,
+    required: true,
     trim: true,
   },
   image: {
     type: String,
     required: true,
-    // required: false,
     trim: true,
   },
   price: {
     type: Number,
-    required: false,
+    required: true,
     min: 0,
   },
   link: {
     type: String,
-    required: false,
+    required: true,
   },
   heading: {
     type: String,
-    required: false,
+    required: true,
     default: "",
   },
   moddleNo: {
     type: String,
-    required: false,
+    required: true,
   },
   originalPrice: {
     type: Number,
-    required: false,
+    required: true,
     min: 0,
   },
   position: { type: Number, default: 0 }, // Add position field

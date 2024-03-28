@@ -16,66 +16,65 @@ const s3 = new AWS.S3({
 export const createProductController = async (req, res: Response) => {
   try {
     // Extract name, image, and price from the request body
-    // const { name, price, moddleNo, originalPrice, link } = req.body;
+    const { name, price, moddleNo, originalPrice, link } = req.body;
 
-    // // Initialize an array to store missing fields
-    // const missingFields: string[] = [];
+    // Initialize an array to store missing fields
+    const missingFields: string[] = [];
 
-    // // Check each field individually
-    // if (!name) {
-    //   missingFields.push("name");
-    // }
-    // if (!req?.file) {
-    //   missingFields.push("image");
-    // }
-    // if (!price) {
-    //   missingFields.push("price");
-    // }
-    // if (!moddleNo) {
-    //   missingFields.push("moddleNo");
-    // }
-    // if (!originalPrice) {
-    //   missingFields.push("originalPrice");
-    // }
-    // if (!link) {
-    //   missingFields.push("link");
-    // }
+    // Check each field individually
+    if (!name) {
+      missingFields.push("name");
+    }
+    if (!req?.file) {
+      missingFields.push("image");
+    }
+    if (!price) {
+      missingFields.push("price");
+    }
+    if (!moddleNo) {
+      missingFields.push("moddleNo");
+    }
+    if (!originalPrice) {
+      missingFields.push("originalPrice");
+    }
+    if (!link) {
+      missingFields.push("link");
+    }
 
-    // // If any field is missing, return a 400 error with the missing fields
-    // if (missingFields.length > 0) {
-    //   return res.status(400).json({
-    //     error: `The following field(s) are required: ${missingFields.join(
-    //       ", "
-    //     )}`,
-    //   });
-    // }
+    // If any field is missing, return a 400 error with the missing fields
+    if (missingFields.length > 0) {
+      return res.status(400).json({
+        error: `The following field(s) are required: ${missingFields.join(
+          ", "
+        )}`,
+      });
+    }
 
     // // Generate a unique filename for the image
-    // const filename = `${uuidv4()}.webp`;
+    const filename = `${uuidv4()}.webp`;
 
     // // Upload image to S3 bucket
-    // await s3
-    //   .upload({
-    //     Bucket: process.env.AWS_BUCKET_NAME,
-    //     Key: filename,
-    //     Body: req.file?.buffer,
-    //     ContentType: req?.file?.mimetype,
-    //   })
-    //   .promise();
+    await s3
+      .upload({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: filename,
+        Body: req.file?.buffer,
+        ContentType: req?.file?.mimetype,
+      })
+      .promise();
 
     // Construct the URL of the uploaded image
-    // const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${filename}`;
+    const imageUrl = `https://${process.env.AWS_BUCKET_NAME}.s3.amazonaws.com/${filename}`;
 
     // Create a new product instance
-    // const product = new Product({
-    //   name,
-    //   image: imageUrl,
-    //   price,
-    //   moddleNo,
-    //   originalPrice,
-    //   link,
-    // });
-    const product = new Product(req.body);
+    const product = new Product({
+      name,
+      image: imageUrl,
+      price,
+      moddleNo,
+      originalPrice,
+      link,
+    });
 
     // Save the product to the database
     await product.save();
