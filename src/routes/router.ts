@@ -62,4 +62,5 @@ router.get("/generateReportForSingleInstrument", isLogin, userController.generat
 router.get("/generateReportOfMultipleInstrument", isLogin, userController.generateReportOfMultipleDevice);
 
 router.post("/addtag", isLogin, tagController.addTag);
+router.get("/getAllTagsByUserId", isLogin, tagController.getAllTagsByUserId);
 export default router;
