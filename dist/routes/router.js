@@ -1,13 +1,38 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const userController = __importStar(require("../controllers/UserController"));
+const tagController = __importStar(require("../controllers/tagController"));
 const registerController_1 = require("../controllers/registerController");
-const loginController_1 = require("../controllers/loginController");
-const productController_1 = require("../controllers/productController");
-const authentication_1 = require("../middleware/authentication");
+const loginController_1 = require("@Odin/controllers/loginController");
+const productController_1 = require("@Odin/controllers/productController");
+const authentication_1 = require("@Odin/middleware/authentication");
 const multer_1 = __importDefault(require("multer"));
 // const storage = multer.diskStorage({
 //   destination: function (req, file, callback) {
@@ -44,5 +69,12 @@ router
     .all(authentication_1.isLogin)
     .post(upload.single("image"), productController_1.createProductController)
     .get(productController_1.getProducts);
+router.post("/addrecord", authentication_1.isLogin, userController.addRecord);
+router.get("/gethistory", authentication_1.isLogin, userController.getHistory);
+router.get("/getHistoryByDeviceId", authentication_1.isLogin, userController.getHistoryByDeviveId);
+router.get("/generateReportForSingleInstrument", authentication_1.isLogin, userController.generateReportForSingleInstrument);
+router.get("/generateReportOfMultipleInstrument", authentication_1.isLogin, userController.generateReportOfMultipleDevice);
+router.post("/addtag", authentication_1.isLogin, tagController.addTag);
+router.get("/getAllTagsByUserId", authentication_1.isLogin, tagController.getAllTagsByUserId);
 exports.default = router;
 //# sourceMappingURL=router.js.map

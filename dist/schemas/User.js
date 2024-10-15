@@ -14,6 +14,8 @@ const userSchema = new mongoose_1.default.Schema({
     weight: { type: Number, required: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
+    dateOfBirth: { type: String, required: true },
+    gender: { type: String, required: true },
 });
 const UserModel = mongoose_1.default.model("User", userSchema);
 exports.default = UserModel;

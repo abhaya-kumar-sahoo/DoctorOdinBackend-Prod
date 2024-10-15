@@ -18,6 +18,8 @@ const registerController = async (req, res) => {
             "weight",
             "firstName",
             "lastName",
+            "gender",
+            "dateOfBirth"
         ];
         // Check if all required fields are present
         const missingFields = [];
@@ -48,6 +50,8 @@ const registerController = async (req, res) => {
             weight: req.body.weight,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            gender: req.body.gender,
+            dateOfBirth: req.body.dateOfBirth
         });
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });

@@ -7,7 +7,7 @@ exports.loginController = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 // src/controllers/loginController.ts
-const User_1 = __importDefault(require("../schemas/User"));
+const User_1 = __importDefault(require("@Odin/schemas/User"));
 // console.log(process.env.JWT_SECRET);
 const loginController = async (req, res) => {
     try {

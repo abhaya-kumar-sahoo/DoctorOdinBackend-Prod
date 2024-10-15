@@ -27,7 +27,7 @@ const productSchema = new mongoose_1.default.Schema({
     },
     heading: {
         type: String,
-        required: false,
+        // required: true,
         default: "",
     },
     moddleNo: {
