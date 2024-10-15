@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
   },
   heading: {
     type: String,
-    required: true,
+    // required: true,
     default: "",
   },
   moddleNo: {

@@ -15,6 +15,8 @@ const s3 = new AWS.S3({
 // console.log(process.env);
 export const createProductController = async (req, res: Response) => {
   try {
+    const lastProduct = await Product.findOne().sort({ position: -1 });
+    const newPosition = lastProduct ? lastProduct.position + 1 : 1;
     // Extract name, image, and price from the request body
     const { name, price, moddleNo, originalPrice, link } = req.body;
 
@@ -74,6 +76,7 @@ export const createProductController = async (req, res: Response) => {
       moddleNo,
       originalPrice,
       link,
+      position: newPosition,
     });
 
     // Save the product to the database
@@ -276,7 +279,7 @@ export const updateProductOrder = async (req: Request, res: Response) => {
   try {
     const { position } = req.body;
     const { productId } = req.params;
-
+console.log("positionpositionposition",position)
     // Validate productId format
     if (!productId || !/^[0-9a-fA-F]{24}$/.test(productId)) {
       return res.status(400).json({ error: "Invalid productId" });
@@ -333,24 +336,28 @@ export const deleteProduct = async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Invalid productId" });
     }
     const product = await Product.findById(productId);
-
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
     // Finding the product by productId and deleting it
     const deletedProduct = await Product.findByIdAndDelete(productId);
 
     const filename = product.image.split("/").pop(); // Extract filename from image URL
-    await s3
+   const sandy =  await s3
       .deleteObject({
         Bucket: process.env.AWS_BUCKET_NAME,
         Key: filename,
       })
+     
       .promise();
+      console.log("sandtyy", sandy)
     // If product not found, return 404 error
     if (!deletedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
 
     // Sending success response
-    res.status(200).json({ message: "Product deleted successfully" });
+  return  res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
     // Handling errors
     console.error("Error deleting product:", error);

@@ -39,7 +39,7 @@
   },
   "scripts": {
     "ts-prepare": "ts-patch install -s",
-    "dev": "yarn ts-prepare && nodemon ./src/server.ts",
+    "dev": "npm run ts-prepare && nodemon ./src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc && tsc-alias",
     "dock": "docker build -t abhayasahoo/doctorodinbackend .",
