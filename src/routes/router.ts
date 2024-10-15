@@ -43,7 +43,7 @@ router.post("/login", loginController);
 
 router
   .route("/product/:productId")
-  .all(isLogin) // Apply middleware here if needed
+  .all(isLogin) 
   .put(upload.single("image"), updateProduct)
   .patch(updateProductOrder)
   .get(getProductById)
