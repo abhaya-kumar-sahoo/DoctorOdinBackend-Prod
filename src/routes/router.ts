@@ -1,6 +1,7 @@
 import express from "express";
 import * as userController from "../controllers/UserController";
 import * as tagController from "../controllers/tagController";
+import * as conductTestController from "../controllers/conductTestController";
 import { registerController } from "../controllers/registerController";
 import { loginController } from "@Odin/controllers/loginController";
 import {
@@ -33,7 +34,7 @@ import multer from "multer";
 // });
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-// const upload = multer({ dest: "uploads/" });
+
 
 const router = express.Router();
 
@@ -63,4 +64,6 @@ router.get("/generateReportOfMultipleInstrument", isLogin, userController.genera
 
 router.post("/addtag", isLogin, tagController.addTag);
 router.get("/getAllTagsByUserId", isLogin, tagController.getAllTagsByUserId);
+
+router.post("/addTest",isLogin, conductTestController.createTest)
 export default router;

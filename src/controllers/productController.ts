@@ -293,10 +293,11 @@ console.log("positionpositionposition",position)
     // Find the product by its ID
     const product = await Product.findById(productId);
 
-    // Check if product exists
+    // Check if product exists8pw2W2r8w8520e85ppp
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }
+
 
     // Find the product with the specified position
     const productWithPosition = await Product.findOne({ position });
@@ -350,7 +351,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
       })
      
       .promise();
-      console.log("sandtyy", sandy)
+      
     // If product not found, return 404 error
     if (!deletedProduct) {
       return res.status(404).json({ error: "Product not found" });
