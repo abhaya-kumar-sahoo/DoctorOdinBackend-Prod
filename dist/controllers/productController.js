@@ -260,7 +260,7 @@ const updateProductOrder = async (req, res) => {
         }
         // Find the product by its ID
         const product = await ProductCatlog_1.Product.findById(productId);
-        // Check if product exists
+        // Check if product exists8pw2W2r8w8520e85ppp
         if (!product) {
             return res.status(404).json({ error: "Product not found" });
         }
@@ -307,7 +307,6 @@ const deleteProduct = async (req, res) => {
             Key: filename,
         })
             .promise();
-        console.log("sandtyy", sandy);
         // If product not found, return 404 error
         if (!deletedProduct) {
             return res.status(404).json({ error: "Product not found" });

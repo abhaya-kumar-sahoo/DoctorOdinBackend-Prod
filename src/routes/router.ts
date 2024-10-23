@@ -3,6 +3,7 @@ import * as userController from "../controllers/UserController";
 import * as tagController from "../controllers/tagController";
 import * as conductTestController from "../controllers/conductTestController";
 import { registerController } from "../controllers/registerController";
+import * as forgetPassword from "../controllers/forgetPasswordController"
 import { loginController } from "@Odin/controllers/loginController";
 import {
   createProductController,
@@ -35,7 +36,6 @@ import multer from "multer";
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
 const router = express.Router();
 
 router.post("/register", registerController);
@@ -44,7 +44,7 @@ router.post("/login", loginController);
 
 router
   .route("/product/:productId")
-  .all(isLogin) 
+  .all(isLogin)
   .put(upload.single("image"), updateProduct)
   .patch(updateProductOrder)
   .get(getProductById)
@@ -58,12 +58,32 @@ router
 
 router.post("/addrecord", isLogin, userController.addRecord);
 router.get("/gethistory", isLogin, userController.getHistory);
-router.get("/getHistoryByDeviceId", isLogin, userController.getHistoryByDeviveId);
-router.get("/generateReportForSingleInstrument", isLogin, userController.generateReportForSingleInstrument);
-router.get("/generateReportOfMultipleInstrument", isLogin, userController.generateReportOfMultipleDevice);
+router.get(
+  "/getHistoryByDeviceId",
+  isLogin,
+  userController.getHistoryByDeviveId
+);
+router.get(
+  "/generateReportForSingleInstrument",
+  isLogin,
+  userController.generateReportForSingleInstrument
+);
+router.get(
+  "/generateReportOfMultipleInstrument",
+  isLogin,
+  userController.generateReportOfMultipleDevice
+);
 
 router.post("/addtag", isLogin, tagController.addTag);
 router.get("/getAllTagsByUserId", isLogin, tagController.getAllTagsByUserId);
+// testApi Endpoints 
+router.post("/addTest", isLogin, conductTestController.createTest);
+router.get("/getTests", isLogin, conductTestController.getAllTests);
+router.get("/getTest/:id", isLogin, conductTestController.getTestById);
+router.patch("/updateTest/:id", isLogin, conductTestController.updateTest);
+router.delete("/deleteTest/:id", isLogin, conductTestController.deleteTest);
 
-router.post("/addTest",isLogin, conductTestController.createTest)
+//  forget password api  
+router.post( "/forgetPassword",isLogin,forgetPassword.sendOtpForForgetPassword)
+router.post( "/updatePassword",isLogin,forgetPassword.updatePassword)
 export default router;

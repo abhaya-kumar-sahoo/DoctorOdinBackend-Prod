@@ -29,7 +29,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userController = __importStar(require("../controllers/UserController"));
 const tagController = __importStar(require("../controllers/tagController"));
+const conductTestController = __importStar(require("../controllers/conductTestController"));
 const registerController_1 = require("../controllers/registerController");
+const forgetPassword = __importStar(require("../controllers/forgetPasswordController"));
 const loginController_1 = require("../controllers/loginController");
 const productController_1 = require("../controllers/productController");
 const authentication_1 = require("../middleware/authentication");
@@ -53,7 +55,6 @@ const multer_1 = __importDefault(require("multer"));
 // });
 const storage = multer_1.default.memoryStorage();
 const upload = (0, multer_1.default)({ storage: storage });
-// const upload = multer({ dest: "uploads/" });
 const router = express_1.default.Router();
 router.post("/register", registerController_1.registerController);
 router.post("/login", loginController_1.loginController);
@@ -76,5 +77,14 @@ router.get("/generateReportForSingleInstrument", authentication_1.isLogin, userC
 router.get("/generateReportOfMultipleInstrument", authentication_1.isLogin, userController.generateReportOfMultipleDevice);
 router.post("/addtag", authentication_1.isLogin, tagController.addTag);
 router.get("/getAllTagsByUserId", authentication_1.isLogin, tagController.getAllTagsByUserId);
+// testApi Endpoints 
+router.post("/addTest", authentication_1.isLogin, conductTestController.createTest);
+router.get("/getTests", authentication_1.isLogin, conductTestController.getAllTests);
+router.get("/getTest/:id", authentication_1.isLogin, conductTestController.getTestById);
+router.patch("/updateTest/:id", authentication_1.isLogin, conductTestController.updateTest);
+router.delete("/deleteTest/:id", authentication_1.isLogin, conductTestController.deleteTest);
+//  forget password api  
+router.post("/forgetPassword", authentication_1.isLogin, forgetPassword.sendOtpForForgetPassword);
+router.post("/updatePassword", authentication_1.isLogin, forgetPassword.updatePassword);
 exports.default = router;
 //# sourceMappingURL=router.js.map
