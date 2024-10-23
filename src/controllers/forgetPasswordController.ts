@@ -51,7 +51,7 @@ export const sendOtpForForgetPassword = async (req, res) => {
         // If email failed to send
         return res.status(500).json({ success: false, message: "Server error" });
       }
-    } catch (error) {
+    } catch (error) { 
       console.error("Error sending email:", error);
       return res.status(500).json({ success: false, message: "Server error" });
     }
