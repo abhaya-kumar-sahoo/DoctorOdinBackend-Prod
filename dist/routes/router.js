@@ -77,13 +77,13 @@ router.get("/generateReportForSingleInstrument", authentication_1.isLogin, userC
 router.get("/generateReportOfMultipleInstrument", authentication_1.isLogin, userController.generateReportOfMultipleDevice);
 router.post("/addtag", authentication_1.isLogin, tagController.addTag);
 router.get("/getAllTagsByUserId", authentication_1.isLogin, tagController.getAllTagsByUserId);
-// testApi Endpoints 
+// testApi Endpoints
 router.post("/addTest", authentication_1.isLogin, conductTestController.createTest);
 router.get("/getTests", authentication_1.isLogin, conductTestController.getAllTests);
 router.get("/getTest/:id", authentication_1.isLogin, conductTestController.getTestById);
 router.patch("/updateTest/:id", authentication_1.isLogin, conductTestController.updateTest);
 router.delete("/deleteTest/:id", authentication_1.isLogin, conductTestController.deleteTest);
-//  forget password api  
+//  forget password api
 router.post("/forgetPassword", authentication_1.isLogin, forgetPassword.sendOtpForForgetPassword);
 router.post("/updatePassword", authentication_1.isLogin, forgetPassword.updatePassword);
 exports.default = router;
