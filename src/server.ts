@@ -7,9 +7,9 @@ import router from "@Odin/routes/router";
 import cors from "cors";
 import path from "path";
 const app = express();
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); // Set the views directory
-app.use(express.static(path.join(__dirname, "public")));
+// app.set("view engine", "ejs");
+// app.set("views", path.join(__dirname, "views")); // Set the views directory
+// app.use(express.static(path.join(__dirname, "public")));
 
 require("dotenv").config();
 
@@ -23,44 +23,44 @@ app.use("/", router);
 app.use(bodyParser.json());
 
 connectDB();
-const swaggerDefinition = {
-  openapi: "3.0.0",
-  info: {
-    title: "Express API for JSONPlaceholder",
-    version: "1.0.0",
-    description:
-      "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
-  },
-  authAction: {
-    JWT: {
-      name: "JWT",
-      schema: {
-        type: "apiKey",
-        in: "header",
-        name: "Authorization",
-        description: "",
-      },
-      value: "Bearer <JWT>",
-    },
-  },
-  servers: [
-    {
-      url: "http://localhost:3000",
-      description: "Development server",
-    },
-  ],
-};
+// const swaggerDefinition = {
+//   openapi: "3.0.0",
+//   info: {
+//     title: "Express API for JSONPlaceholder",
+//     version: "1.0.0",
+//     description:
+//       "This is a REST API application made with Express. It retrieves data from JSONPlaceholder.",
+//   },
+//   authAction: {
+//     JWT: {
+//       name: "JWT",
+//       schema: {
+//         type: "apiKey",
+//         in: "header",
+//         name: "Authorization",
+//         description: "",
+//       },
+//       value: "Bearer <JWT>",
+//     },
+//   },
+//   servers: [
+//     {
+//       url: "http://localhost:3000",
+//       description: "Development server",
+//     },
+//   ],
+// };
 
-const options = {
-  swaggerDefinition,
-  apis: [`${__dirname}/swagger/*`],
-};
-const swaggerSpec = swaggerJSDoc(options);
+// const options = {
+//   swaggerDefinition,
+//   apis: [`${__dirname}/swagger/*`],
+// };
+// const swaggerSpec = swaggerJSDoc(options);
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/", async (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "home.html"));
+  res.json({ fine: true, description: "Ok" });
 });
 
 // app.get("/", (req, res) => {
