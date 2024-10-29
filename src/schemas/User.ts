@@ -11,7 +11,6 @@ export interface User extends Document {
   firstName: string;
   lastName: string;
   gender: string;
-  dateOfBirth: string;
   otp: string;
 }
 
