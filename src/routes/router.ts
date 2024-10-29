@@ -3,7 +3,7 @@ import * as userController from "../controllers/UserController";
 import * as tagController from "../controllers/tagController";
 import * as conductTestController from "../controllers/conductTestController";
 import { registerController } from "../controllers/registerController";
-import * as forgetPassword from "../controllers/forgetPasswordController"
+import * as forgetPassword from "../controllers/forgetPasswordController";
 import { loginController } from "@Odin/controllers/loginController";
 import {
   createProductController,
@@ -76,14 +76,18 @@ router.get(
 
 router.post("/addtag", isLogin, tagController.addTag);
 router.get("/getAllTagsByUserId", isLogin, tagController.getAllTagsByUserId);
-// testApi Endpoints 
+// testApi Endpoints
 router.post("/addTest", isLogin, conductTestController.createTest);
 router.get("/getTests", isLogin, conductTestController.getAllTests);
 router.get("/getTest/:id", isLogin, conductTestController.getTestById);
 router.patch("/updateTest/:id", isLogin, conductTestController.updateTest);
 router.delete("/deleteTest/:id", isLogin, conductTestController.deleteTest);
 
-//  forget password api  
-router.post( "/forgetPassword",isLogin,forgetPassword.sendOtpForForgetPassword)
-router.post( "/updatePassword",isLogin,forgetPassword.updatePassword)
+//  forget password api
+router.post(
+  "/forgetPassword",
+  isLogin,
+  forgetPassword.sendOtpForForgetPassword
+);
+router.post("/updatePassword", isLogin, forgetPassword.updatePassword);
 export default router;
