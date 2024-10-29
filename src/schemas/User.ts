@@ -24,7 +24,6 @@ const userSchema = new mongoose.Schema<User>({
   weight: { type: Number, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  dateOfBirth: { type: String, required: true },
   gender: { type: String, required: true },
   otp: {
     type: String,

@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import UserModel, { User } from "../schemas/User";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const registerController = async (req: Request, res: Response) => {
   try {
@@ -16,7 +17,6 @@ export const registerController = async (req: Request, res: Response) => {
       "firstName",
       "lastName",
       "gender",
-      "dateOfBirth"
     ];
 
     // Check if all required fields are present
@@ -52,13 +52,18 @@ export const registerController = async (req: Request, res: Response) => {
       weight: req.body.weight,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
-      gender:req.body.gender,
-      dateOfBirth:req.body.dateOfBirth
+      gender: req.body.gender,
     });
 
     await newUser.save();
+    const token = await jwt.sign(
+      { userId: newUser._id },
+      process.env.JWT_SECRET
+    );
 
-    res.status(201).json({ message: "User registered successfully" });
+    res
+      .status(201)
+      .json({ message: "User registered successfully", token, user: newUser });
   } catch (error) {
     console.error("Error registering user:", error);
     res.status(500).json({ message: "Internal Server Error" });
