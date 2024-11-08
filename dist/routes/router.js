@@ -27,7 +27,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userController = __importStar(require("../controllers/UserController"));
+const userController = __importStar(require("../controllers/ReportController"));
 const tagController = __importStar(require("../controllers/tagController"));
 const conductTestController = __importStar(require("../controllers/conductTestController"));
 const registerController_1 = require("../controllers/registerController");
@@ -36,6 +36,7 @@ const loginController_1 = require("../controllers/loginController");
 const productController_1 = require("../controllers/productController");
 const authentication_1 = require("../middleware/authentication");
 const multer_1 = __importDefault(require("multer"));
+const UserController_1 = require("../controllers/UserController");
 // const storage = multer.diskStorage({
 //   destination: function (req, file, callback) {
 //     callback(null, __dirname + "/files");
@@ -70,6 +71,7 @@ router
     .all(authentication_1.isLogin)
     .post(upload.single("image"), productController_1.createProductController)
     .get(productController_1.getProducts);
+router.get("/my_profile", authentication_1.isLogin, UserController_1.getMyProfile);
 router.post("/addrecord", authentication_1.isLogin, userController.addRecord);
 router.get("/gethistory", authentication_1.isLogin, userController.getHistory);
 router.get("/getHistoryByDeviceId", authentication_1.isLogin, userController.getHistoryByDeviveId);

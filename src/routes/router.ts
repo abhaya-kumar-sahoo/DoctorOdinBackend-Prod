@@ -1,5 +1,5 @@
 import express from "express";
-import * as userController from "../controllers/UserController";
+import * as userController from "../controllers/ReportController";
 import * as tagController from "../controllers/tagController";
 import * as conductTestController from "../controllers/conductTestController";
 import { registerController } from "../controllers/registerController";
@@ -15,6 +15,7 @@ import {
 } from "@Odin/controllers/productController";
 import { isLogin } from "@Odin/middleware/authentication";
 import multer from "multer";
+import { getMyProfile } from "@Odin/controllers/UserController";
 // const storage = multer.diskStorage({
 //   destination: function (req, file, callback) {
 //     callback(null, __dirname + "/files");
@@ -55,6 +56,8 @@ router
   .all(isLogin)
   .post(upload.single("image"), createProductController)
   .get(getProducts);
+
+router.get("/my_profile", isLogin, getMyProfile);
 
 router.post("/addrecord", isLogin, userController.addRecord);
 router.get("/gethistory", isLogin, userController.getHistory);

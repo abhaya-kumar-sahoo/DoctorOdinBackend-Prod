@@ -12,22 +12,22 @@ const addTag = async (req, res) => {
         const userId = req.user?.userId;
         console.log(req.user.userId);
         dataToInsert.userId = userId;
-        const firstName = (dataToInsert.firstName).toUpperCase().trim();
+        const firstName = dataToInsert.firstName.toUpperCase().trim();
         dataToInsert.firstName = firstName;
-        const lastName = (dataToInsert.lastName).toUpperCase().trim();
+        const lastName = dataToInsert.lastName.toUpperCase().trim();
         dataToInsert.lastName = lastName;
         const existingTag = await Tag_1.default.findOne({
             $and: [
                 { userId: dataToInsert.userId },
-                { firstName: dataToInsert.firstName }
-            ]
+                { firstName: dataToInsert.firstName },
+            ],
         });
         if (existingTag) {
             return (0, response_1.response)(res, 409, "Tag already exists", false);
         }
         const tag = new Tag_1.default(dataToInsert);
         const result = await tag.save();
-        return (0, response_1.response)(res, 201, "tag added successfully", true);
+        return (0, response_1.response)(res, 201, "tag added successfully", true, result);
     }
     catch (error) {
         return (0, response_1.response)(res, 500, "internal server error ", false, error.message);
