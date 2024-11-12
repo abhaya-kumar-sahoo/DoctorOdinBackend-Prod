@@ -9,13 +9,11 @@ const Tag_1 = __importDefault(require("../schemas/Tag"));
 const addTag = async (req, res) => {
     try {
         const dataToInsert = req.body;
+        if (!dataToInsert?.firstName) {
+            return (0, response_1.response)(res, 400, "First Name is required", false);
+        }
         const userId = req.user?.userId;
-        console.log(req.user.userId);
         dataToInsert.userId = userId;
-        const firstName = dataToInsert.firstName.toUpperCase().trim();
-        dataToInsert.firstName = firstName;
-        const lastName = dataToInsert.lastName.toUpperCase().trim();
-        dataToInsert.lastName = lastName;
         const existingTag = await Tag_1.default.findOne({
             $and: [
                 { userId: dataToInsert.userId },

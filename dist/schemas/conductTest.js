@@ -16,6 +16,8 @@ const ConductTestSchema = new mongoose_1.default.Schema({
         required: true,
         trim: true,
     },
+    user: { type: mongoose_1.default.Types.ObjectId, required: true, ref: "User" },
+    member: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 });

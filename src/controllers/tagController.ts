@@ -4,17 +4,13 @@ import TagModel from "../schemas/Tag";
 export const addTag = async (req, res) => {
   try {
     const dataToInsert = req.body;
+    if (!dataToInsert?.firstName) {
+      return response(res, 400, "First Name is required", false);
+    }
 
     const userId = req.user?.userId;
-    console.log(req.user.userId);
 
     dataToInsert.userId = userId;
-
-    const firstName = dataToInsert.firstName.toUpperCase().trim();
-    dataToInsert.firstName = firstName;
-
-    const lastName = dataToInsert.lastName.toUpperCase().trim();
-    dataToInsert.lastName = lastName;
 
     const existingTag = await TagModel.findOne({
       $and: [

@@ -1,15 +1,15 @@
 import mongoose, { Document } from "mongoose";
 
 export interface Tags extends Document {
-    userId: string;
-    firstName: string;
-    lastName:string;
+  userId: string;
+  firstName: string;
+  lastName: string;
 }
 
 const recordsSchema = new mongoose.Schema<Tags>({
-    userId: { type: String, required:true }, // get from token
-    firstName: { type: String, required: true }, // it should come from  frontend
-    lastName:{ type: String, required: true },
+  userId: { type: String, required: true }, // get from token
+  firstName: { type: String, required: true }, // it should come from  frontend
+  lastName: { type: String, required: false },
 });
 
 const TagModel = mongoose.model<Tags>("Tag", recordsSchema);
