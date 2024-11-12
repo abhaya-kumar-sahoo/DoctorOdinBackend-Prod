@@ -34,12 +34,25 @@ export const createTest = async (req: AuthenticatedRequest, res: Response) => {
     return res.status(500).json({ message: error.message || "Server Error" });
   }
 };
-
+interface Query {
+  createdAt?: any;
+  user: any;
+  member: any;
+  testName?: any;
+}
 // Get all tests
 export const getAllTests = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const { userId } = req?.user;
-    const { name, startDate, endDate, date, page = 1, limit = 20 } = req.query;
+    const {
+      name,
+      startDate,
+      endDate,
+      date,
+      page = 1,
+      limit = 20,
+      testName,
+    } = req.query;
 
     // Date filtering conditions
     const dateFilter: any = {};
@@ -65,12 +78,15 @@ export const getAllTests = async (req: AuthenticatedRequest, res: Response) => {
     const limitNum = parseInt(limit as string, 10);
     const skip = (pageNum - 1) * limitNum;
     // Build the query with date filtering if provided
-    const query = {
+    const query: Query = {
       user: userId,
       member: name,
       ...(Object.keys(dateFilter).length && { createdAt: dateFilter }),
     };
 
+    if (testName) {
+      query.testName = testName;
+    }
     const tests = await ConductTest.find(query)
       .skip(skip)
       .limit(limitNum)
