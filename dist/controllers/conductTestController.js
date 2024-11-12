@@ -31,7 +31,7 @@ exports.createTest = createTest;
 const getAllTests = async (req, res) => {
     try {
         const { userId } = req?.user;
-        const { name, startDate, endDate, date, page = 1, limit = 20 } = req.query;
+        const { name, startDate, endDate, date, page = 1, limit = 20, testName, } = req.query;
         // Date filtering conditions
         const dateFilter = {};
         if (date) {
@@ -60,6 +60,9 @@ const getAllTests = async (req, res) => {
             member: name,
             ...(Object.keys(dateFilter).length && { createdAt: dateFilter }),
         };
+        if (testName) {
+            query.testName = testName;
+        }
         const tests = await conductTest_1.ConductTest.find(query)
             .skip(skip)
             .limit(limitNum)
