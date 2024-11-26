@@ -10,14 +10,11 @@ export const registerController = async (req: Request, res: Response) => {
     const requiredFields = [
       "email",
       "password",
-      "phoneNumber",
       "age",
       "height",
       "weight",
       "firstName",
-      "lastName",
       "gender",
-      "type",
     ];
 
     // Check if all required fields are present

@@ -13,14 +13,11 @@ const registerController = async (req, res) => {
         const requiredFields = [
             "email",
             "password",
-            "phoneNumber",
             "age",
             "height",
             "weight",
             "firstName",
-            "lastName",
             "gender",
-            "type",
         ];
         // Check if all required fields are present
         const missingFields = [];
