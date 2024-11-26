@@ -18,12 +18,12 @@ export interface User extends Document {
 const userSchema = new mongoose.Schema<User>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
+  phoneNumber: { type: String, required: false },
   age: { type: Number, required: true },
   height: { type: Number, required: true },
   weight: { type: Number, required: true },
   firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
+  lastName: { type: String, required: false },
   gender: { type: String, required: true },
   otp: {
     type: String,
