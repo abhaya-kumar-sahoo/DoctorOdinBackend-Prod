@@ -59,6 +59,7 @@ const upload = (0, multer_1.default)({ storage: storage });
 const router = express_1.default.Router();
 router.post("/register", registerController_1.registerController);
 router.post("/login", loginController_1.loginController);
+router.post("/login-by-google", loginController_1.loginWithGoogleController);
 router
     .route("/product/:productId")
     .all(authentication_1.isLogin)

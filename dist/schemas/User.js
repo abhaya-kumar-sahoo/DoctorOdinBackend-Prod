@@ -18,6 +18,11 @@ const userSchema = new mongoose_1.default.Schema({
     otp: {
         type: String,
     },
+    userType: {
+        type: String,
+        enum: ["google", "facebook", "apple", "normal"],
+        default: "normal",
+    },
 });
 const UserModel = mongoose_1.default.model("User", userSchema);
 exports.default = UserModel;

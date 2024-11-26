@@ -20,6 +20,7 @@ const registerController = async (req, res) => {
             "firstName",
             "lastName",
             "gender",
+            "type",
         ];
         // Check if all required fields are present
         const missingFields = [];
@@ -51,6 +52,7 @@ const registerController = async (req, res) => {
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             gender: req.body.gender,
+            userType: req.body.type,
         });
         await newUser.save();
         const token = await jsonwebtoken_1.default.sign({ userId: newUser._id }, process.env.JWT_SECRET);
