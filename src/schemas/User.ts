@@ -12,6 +12,7 @@ export interface User extends Document {
   lastName: string;
   gender: string;
   otp: string;
+  userType: "google" | "facebook" | "apple" | "normal";
 }
 
 const userSchema = new mongoose.Schema<User>({
@@ -26,6 +27,11 @@ const userSchema = new mongoose.Schema<User>({
   gender: { type: String, required: true },
   otp: {
     type: String,
+  },
+  userType: {
+    type: String,
+    enum: ["google", "facebook", "apple", "normal"],
+    default: "normal",
   },
 });
 

@@ -17,6 +17,7 @@ export const registerController = async (req: Request, res: Response) => {
       "firstName",
       "lastName",
       "gender",
+      "type",
     ];
 
     // Check if all required fields are present
@@ -53,6 +54,7 @@ export const registerController = async (req: Request, res: Response) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       gender: req.body.gender,
+      userType: req.body.type,
     });
 
     await newUser.save();

@@ -35,3 +35,34 @@ export const loginController = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
+export const loginWithGoogleController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    // Input validation
+    const { email, type } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: "Email are required" });
+    }
+
+    // Find user by email
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+    if (type !== "google") {
+      return res.status(401).json({ message: "Invalid user type" });
+    }
+
+    // Password is correct, generate JWT token
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+
+    // Return JWT token in response
+    res.status(200).json({ message: "Login successful", token });
+  } catch (error) {
+    console.error("Error logging in:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};

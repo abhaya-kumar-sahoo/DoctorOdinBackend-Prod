@@ -4,7 +4,10 @@ import * as tagController from "../controllers/tagController";
 import * as conductTestController from "../controllers/conductTestController";
 import { registerController } from "../controllers/registerController";
 import * as forgetPassword from "../controllers/forgetPasswordController";
-import { loginController } from "@Odin/controllers/loginController";
+import {
+  loginController,
+  loginWithGoogleController,
+} from "@Odin/controllers/loginController";
 import {
   createProductController,
   deleteProduct,
@@ -42,6 +45,7 @@ const router = express.Router();
 router.post("/register", registerController);
 
 router.post("/login", loginController);
+router.post("/login-by-google", loginWithGoogleController);
 
 router
   .route("/product/:productId")
